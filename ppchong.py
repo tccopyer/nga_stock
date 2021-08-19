@@ -1,7 +1,8 @@
-import urllib3
+
 import requests
 from bs4 import BeautifulSoup
 import re
+
 page_url='http://youhui.bacaoo.com'
 
 def get_url(page_url):
@@ -20,3 +21,8 @@ for i in housename_divs:
     ## 获取title=“  ”中双引号之间的内容
     print(str(n)+"    "+content)
     n = n + 1
+
+list2=[['你们', '都', '挂', '了', '什么', '价买', '盐湖'], ['报', '，', '腾讯', '盘前', '涨', '5', '个', '点', '了'], ['看', '了', '看', '好像', '没', '人', '讨论', '农业', '股']]
+print(len(list2))
+for line in list2:
+    print(len(line))

@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import pymysql
+import time
+
 from pymysql.converters import escape_string as esing
 
 
@@ -28,9 +30,9 @@ def get_url(page_url):
 #housename_divs = test1.find_all('tbody')
 
 def get_header(housename_divs):
-    n=1
+    #n=1
     for i in housename_divs:
-
+#
         mes=i.find_all('td',class_='c2')
         mes1=mes[0].find('a')##这里将标题内容储存了下来
         mes = mes1.get_text()
@@ -44,8 +46,15 @@ def get_header(housename_divs):
         author1=author[0].find('a')##这里将作者储存了下来
         author=author1.get_text()
 
-        sql1 = "INSERT INTO nga_test (mes,heat,author) VALUES ('%s','%s','%s')"%(esing(mes),heat,author)
-        sql2="UPDATE nga_test SET heat='%s' where mes ='%s'"% (heat,esing(mes))
+
+        timestamp = i.find_all('td', class_='c3')
+        timestamp1 = timestamp[0].find('span', class_='silver postdate')  ##这里将作者储存了下来
+        timestamp = int(timestamp1.get_text())
+
+
+
+        sql1 = "INSERT INTO nga_test (mes,heat,author,timestamp) VALUES ('%s','%s','%s','%s')"%(esing(mes),heat,author,timestamp)
+        sql2="UPDATE nga_test SET timestamp='%s',heat='%s' where mes ='%s'"% (timestamp,heat,esing(mes))
         try:
             cursor.execute(sql1)
             print('新加入')
@@ -54,7 +63,6 @@ def get_header(housename_divs):
             print('已更新')
         conn.commit()
 
-        #print("    "+mes+"       热度："+heat+"       作者： "+author)
 
 
 q=1
@@ -66,5 +74,3 @@ while q<100:
     get_header(housename_divs)
     print(q)
     q=q+1
-
-
